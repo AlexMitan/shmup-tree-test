@@ -38,16 +38,22 @@ window.onload = function() {
     let { xMin, yMin, xMax, yMax } = world;
     let gameW = xMax - xMin;
     let gameH = yMax - yMin;
-    { // draw borders
-        // top
-        svg.append('rect').attrs({'x': xMin, 'y': yMin, 'width': gameW, 'height': 5, 'fill' :'white'});
-        // bottom
-        svg.append('rect').attrs({'x': xMin, 'y': yMax, 'width': gameW, 'height': 5, 'fill' :'white'});
-        // left
-        svg.append('rect').attrs({'x': xMin, 'y': yMin, 'width': 5, 'height': gameH, 'fill' :'white'});
-        // right
-        svg.append('rect').attrs({'x': xMax, 'y': yMin, 'width': 5, 'height': gameH, 'fill' :'white'});
-    }
+    // draw borders
+    // top
+    svg.append('rect').attrs({'x': xMin, 'y': yMin, 'width': gameW, 'height': 5, 'fill' :'white'});
+    // bottom
+    svg.append('rect').attrs({'x': xMin, 'y': yMax, 'width': gameW, 'height': 5, 'fill' :'white'});
+    // left
+    svg.append('rect').attrs({'x': xMin, 'y': yMin, 'width': 5, 'height': gameH, 'fill' :'white'});
+    // right
+    svg.append('rect').attrs({'x': xMax, 'y': yMin, 'width': 5, 'height': gameH, 'fill' :'white'});
+    
+    // instructions
+    svg.append('svg:text').attrs({'x': 50, 'y': yMax + 50})
+                .attr("font-family", "sans-serif")
+                .attr("font-size", "20px")
+                .attr("fill", "white")
+                .text("WASD to move, Space to shoot");
 
     // svgRect(svg, 200, 200, 40, 40, 'red');
     world.addChild(new Score(world, 30, 30));
@@ -57,6 +63,7 @@ window.onload = function() {
     let turn = 0;
     let enemyCooldown = 50;
     let starCooldown = 10;
+    world.gameOver = false;
     function update() {
         // rerender
         world.recurse("update", true);
@@ -75,9 +82,17 @@ window.onload = function() {
         turn += 1;
         player.handleKeyboard(keysDown);
         player.update();
+        if (!world.gameOver) {
+            setTimeout(update, 30);
+        } else {
+            svg.append('svg:text').attrs({'x': xMax / 2 + xMin, 'y': yMax / 2 + yMin})
+                .attr("font-family", "sans-serif")
+                .attr("font-size", "50px")
+                .attr("fill", "white")
+                .text("Game over!");
+        }
     }
-    // update();
-    setInterval(update, 30);
+    update();
 }
 
 

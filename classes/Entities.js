@@ -104,6 +104,7 @@ class Player extends Box {
                 // take damage from enemy
                 this.hp -= other.damage;
                 if (this.hp <= 0) {
+                    this.sendMsg('death', {});
                     this.remove();
                     this.removeFromParent();
                 }

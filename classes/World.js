@@ -11,9 +11,12 @@ class World extends GameObject{
         this.yMax = 400;
     }
 
-    // receiveMsg(sender, str, data) {
-    //     super.receiveMsg(sender, str, data);
-    // }
+    receiveMsg(sender, str, data) {
+        super.receiveMsg(sender, str, data);
+        if (str === 'death' && sender.type === 'player') {
+            this.gameOver = true;
+        }
+    }
 }
 
 module.exports = { World };
